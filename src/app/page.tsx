@@ -1,5 +1,6 @@
 "use client";
 import Link from "next/link"
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 import logo from "./assets/vartha_logo.png"
 import phoneImg from "./assets/phone.png"
@@ -24,6 +25,8 @@ import { useState } from "react";
 
 export default function Home() {
 
+  const router = useRouter();
+
   const [phone, setPhone] = useState('');
 
   const handleSubmit = async (e:React.MouseEvent<HTMLElement>) => {
@@ -32,25 +35,12 @@ export default function Home() {
       alert('Please enter a Phone Number');
       return;
     }
-    try {
-      const response = await fetch('/api/waitlist', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ phone }),
-      });
-
-      if (response.ok) {
-        
-      } else {
-        alert('Failed to add to waitlist');
-      }
-    
-    } catch (error) {
-      console.error('Error:', error);
-      alert('Something went wrong');
+    if (!/^\d{10}$/.test(phone)) {
+      alert('Please enter a valid Phone Number');
+      return;
     }
+    // redirect to questions page with phone number
+    router.push(`/questions?phone=${phone}`);
   };
 
 

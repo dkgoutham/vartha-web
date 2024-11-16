@@ -1,20 +1,25 @@
-import React, { useState } from 'react';
+import React from 'react';
 import "../app/questions/questions.css"
 
-type PreparationStage = 'Prelims' | 'Mains' | 'Interviews';
-type PreparationDuration = 'Less than 1 year' | '1-2 years' | '3+years';
-type CurrentStatus = 'College Student' | 'Full-Time Aspirant' | 'Working Professional';
+type PreparationStage = 'Prelims' | 'Mains' | 'Interviews' | '';
+type PreparationDuration = 'Less than 1 year' | '1-2 years' | '3+years' | '';
+type CurrentStatus = 'College Student' | 'Full-Time Aspirant' | 'Working Professional' | '';
 
 interface QuestionOption {
   value: string;
   label: string;
 }
 
-const Questionnaire = () => {
-  const [stage, setStage] = useState<PreparationStage>('Mains');
-  const [duration, setDuration] = useState<PreparationDuration>('3+years');
-  const [status, setStatus] = useState<CurrentStatus>('Working Professional');
+interface QuestionnaireProps {
+  stage: PreparationStage;
+  setStage: React.Dispatch<React.SetStateAction<PreparationStage>>;
+  duration: PreparationDuration;
+  setDuration: React.Dispatch<React.SetStateAction<PreparationDuration>>;
+  status: CurrentStatus;
+  setStatus: React.Dispatch<React.SetStateAction<CurrentStatus>>;
+}
 
+const Questionnaire: React.FC<QuestionnaireProps> = ({ stage, setStage, duration, setDuration, status, setStatus }) => {
   const stages: QuestionOption[] = [
     { value: 'Prelims', label: 'Prelims' },
     { value: 'Mains', label: 'Mains' },

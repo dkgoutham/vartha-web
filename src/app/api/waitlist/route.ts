@@ -88,7 +88,7 @@ export async function POST(req: Request) {
     return new Response(JSON.stringify({ message: "Added to waitlist", data: savedEntry }), {
       status: 201,
     });
-  } catch (error: any) {
+  } catch (error) {
     console.error("Error:", error);
 
     return new Response(JSON.stringify({ error: "Something went wrong" }), {
@@ -141,7 +141,7 @@ export async function GET(req: Request) {
     return new Response(JSON.stringify({ message: "Phone number found", found : true, data: existingEntry }), {
       status: 200,
     });
-  } catch (error: any) {
+  } catch (error) {
     console.error("Error:", error);
 
     return new Response(JSON.stringify({ error: "Something went wrong", found : false }), {

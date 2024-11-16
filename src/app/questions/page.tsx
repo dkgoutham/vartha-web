@@ -1,21 +1,19 @@
 "use client";
 
 import Left_section from '@/components/left_section';
-import React from 'react'
-import { useState,useEffect } from 'react';
+import React, { Suspense, useState, useEffect } from 'react';
 import Image from 'next/image';
-import send_btn from "../assets/send_arrow.png"
-import "./questions.css"
+import send_btn from "../assets/send_arrow.png";
+import "./questions.css";
 import Questionnaire from '@/components/questionnaire';
-import close from "../assets/close.svg"
+import close from "../assets/close.svg";
 import { useSearchParams, useRouter } from 'next/navigation';
 
 type PreparationStage = 'Prelims' | 'Mains' | 'Interviews' | "";
 type PreparationDuration = 'Less than 1 year' | '1-2 years' | '3+years' | "";
 type CurrentStatus = 'College Student' | 'Full-Time Aspirant' | 'Working Professional' | "";
 
-export default function Questions() {
-
+function QuestionsComponent() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -24,17 +22,13 @@ export default function Questions() {
   const [status, setStatus] = useState<CurrentStatus>('');
 
   const [phone, setPhone] = useState('');
-  
-  // function to check if phone number already exists in the waitlist
+
   const checkPhone = async (phone: string) => {
     try {
       const response = await fetch(`/api/waitlist?phoneNumber=${phone}`);
-      if(response.ok){
+      if (response.ok) {
         const data = await response.json();
-        if(data.found){
-          return true;
-        }
-        return false;
+        return data.found;
       }
       return false;
     } catch (error) {
@@ -42,18 +36,16 @@ export default function Questions() {
       return false;
     }
   };
-  
 
   useEffect(() => {
     const phone = searchParams.get('phone');
     if (phone) {
-      // validity check for phone number
       if (!/^\d{10}$/.test(phone)) {
         alert('Please enter a valid Phone Number');
         router.push('/');
         return;
       }
-      // check if phone number already exists in the waitlist
+
       checkPhone(phone).then((found) => {
         if (found) {
           alert('Phone number already registered');
@@ -61,16 +53,15 @@ export default function Questions() {
           return;
         } else {
           setPhone(phone);
-          return;
         }
       });
-    }else{
+    } else {
       router.push('/join-waitlist');
       return;
     }
-  }, []);
+  }, [searchParams, router]);
 
-  const handleSubmit = async (e:React.MouseEvent<HTMLElement>) => {
+  const handleSubmit = async (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault();
     const response = await fetch('/api/waitlist', {
       method: "POST",
@@ -89,19 +80,10 @@ export default function Questions() {
       router.push('/');
     } else {
       const data = await response.json();
-      if(!data.error){
-        alert('Something went wrong');
-        router.push('/');
-        return;
-      }
-      if(data.error == "Phone number already exists"){
-        alert("Phone number already exists");
-        router.push('/');
-        return;
-      }
-      alert(data.error);
+      alert(data.error || 'Something went wrong');
+      router.push('/');
     }
-  }
+  };
 
   return (
     <div className='bg-white flex flex-row ques_section'>
@@ -114,7 +96,14 @@ export default function Questions() {
       <div className='right_section'>
         <h3>One last step!</h3>
         <h2>Get free premium <br />access for a year!</h2>
-        <Questionnaire stage={stage} setStage={setStage} duration={duration} setDuration={setDuration} status={status} setStatus={setStatus}/>
+        <Questionnaire
+          stage={stage}
+          setStage={setStage}
+          duration={duration}
+          setDuration={setDuration}
+          status={status}
+          setStatus={setStatus}
+        />
         <button className='flex flex-row items-center gap-3 cont_btn' onClick={handleSubmit}>
           Join Waitlist
           <Image src={send_btn} alt='send' width={25}></Image>
@@ -122,5 +111,13 @@ export default function Questions() {
         <button className='skip_btn' onClick={handleSubmit}>Skip</button>
       </div>
     </div>
-  )
+  );
+}
+
+export default function Questions() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <QuestionsComponent />
+    </Suspense>
+  );
 }

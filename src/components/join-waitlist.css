@@ -1,4 +1,4 @@
-/* :root {
+:root {
     --font1: "libre-caslon-text", sans-serif;
     --font2: "figtree", sans-serif;
 }
@@ -104,13 +104,19 @@
         position: relative;
         margin: 0 auto;
         border: none;
+        height: 100vh;
+        overflow-y: scroll;
     }
 
+    /* .close-btn{
+        display: none;
+    } */
 
     .right_section{
         width: 366px;
         margin: 0 auto;
         padding: 20px 12px;
+        min-height: calc(100vh - 336px);
     }
 
     .right_section h3{
@@ -165,4 +171,4 @@
         bottom: 34px;
         width: 342px;
     }
-} */
+}

@@ -1,4 +1,4 @@
-/* :root {
+:root {
     --font1: "libre-caslon-text", sans-serif;
     --font2: "figtree", sans-serif;
 }
@@ -19,7 +19,7 @@
     z-index: 100;
 }
 
-.right_section{
+.right_section_ques{
     height: 520px;
     width: 570px;
     padding-left: 24px;
@@ -27,27 +27,27 @@
     position: relative;
 }
 
-.right_section h3{
+.right_section_ques h3{
     font-family: var(--font2);
     font-size: 16px;
     font-weight: 600;
     width: 130px;
 }
 
-.right_section h2{
+.right_section_ques h2{
     font-family: var(--font1);
     font-size: 32px;
     margin-top: 40px;
     line-height: 115%;
 }
 
-.right_section p{
+.right_section_ques p{
     font-size: 1vw;
     padding-top: 2vh;
     font-family: var(--font2);
 }
 
-.cont_btn{
+.cont_btn_ques{
     background-color: #E57283;
     padding: 8px 14px;
     border-radius: 5px;
@@ -78,22 +78,28 @@
         position: relative;
         margin: 0 auto;
         border: none;
-        height: max-content;
+        overflow-y: scroll;
+        height: 100vh;
     }
 
+    /* .close-btn{
+        display: none;
+    } */
 
-    .right_section{
+    .right_section_ques{
         width: 366px;
         margin: 0 auto;
         padding: 20px 12px;
-        height: 800px;
+        /* height: 800px; */
+        /* min-height: max-content; */
+        height: max-content;
     }
 
-    .right_section h3{
+    .right_section_ques h3{
         font-size: 16px;
     }
 
-    .right_section h2{
+    .right_section_ques h2{
         font-size: 32px;
     }
 
@@ -103,7 +109,7 @@
         margin: 0 auto;
     }
 
-    .cont_btn{
+    .cont_btn_ques{
         display: flex;
         justify-content: center;
         color: white;
@@ -127,6 +133,6 @@
     }
 
     .questionnaire_div{
-        height: max-content;
+        min-height: max-content;
     }
-} */
+}

@@ -1,5 +1,5 @@
 import React from 'react';
-import "../app/questions/questions.css"
+import "./questions.css"
 
 type PreparationStage = 'Prelims' | 'Mains' | 'Interviews' | '';
 type PreparationDuration = 'Less than 1 year' | '1-2 years' | '3+years' | '';

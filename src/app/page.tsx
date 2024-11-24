@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link"
-import { useRouter } from "next/navigation";
+// import { useRouter } from "next/navigation";
 import Image from "next/image";
 import logo from "./assets/vartha_logo.png"
 import phoneImg from "./assets/phone.png"
@@ -21,13 +21,18 @@ import goal_tracking from "./assets/goal_tracking.png"
 import go_btn from "./assets/go_btn.png"
 import ext_send_btn from "./assets/ext_send_btn.png"
 import ext_send_btn_lower from "./assets/ext_sent_btn_lower.png"
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import Questions from "@/components/questions";
+import Join_waitlist from "@/components/join-waitlist";
 
 export default function Home() {
 
-  const router = useRouter();
+  // const router = useRouter();
 
   const [phone, setPhone] = useState('');
+
+  const [showPopup, setShowPopup] = useState(false);
+  const [showJoinPopup, setShowJoinPopup] = useState(false);
 
   const handleSubmit = async (e:React.MouseEvent<HTMLElement>) => {
     e.preventDefault();
@@ -40,8 +45,34 @@ export default function Home() {
       return;
     }
     // redirect to questions page with phone number
-    router.push(`/questions?phone=${phone}`);
+    // router.push(`/questions?phone=${phone}`);
+    setShowPopup(true);
   };
+
+  const handleJoin = () => {
+    setShowJoinPopup(true);
+  }
+
+  useEffect(() => {
+    if (showPopup || showJoinPopup) {
+      // Save current scroll position
+      const scrollY = window.scrollY;
+      
+      // Add styles to prevent scrolling
+      document.body.style.position = 'fixed';
+      document.body.style.top = `-${scrollY}px`;
+      document.body.style.width = '100%';
+      
+      // Cleanup function to remove styles when popup closes
+      return () => {
+        document.body.style.position = '';
+        document.body.style.top = '';
+        document.body.style.width = '';
+        // Restore scroll position
+        window.scrollTo(0, scrollY);
+      };
+    }
+  }, [showPopup, showJoinPopup]);
 
 
   return (
@@ -55,15 +86,15 @@ export default function Home() {
           <h4 style={{fontFamily: "'libre-caslon-text', sans-serif", paddingLeft: "8px", fontSize: "24px"}}>vartha.ai</h4>
         </div>
         <div className="flex flex-row gap-[24px] nav_links">
-          <Link href="/overview">OVERVIEW</Link>
-          <Link href="/features">FEATURES</Link>
-          <Link href="/benefits">BENEFITS</Link>
+          <Link href="#">OVERVIEW</Link>
+          <Link href="#">FEATURES</Link>
+          <Link href="#">BENEFITS</Link>
         </div>
-        <a href="/join-waitlist">
+        {/* <a href="/join-waitlist"> */}
         <div>
-          <button className="join_waitlist_btn">JOIN WAITLIST</button>
+          <button className="join_waitlist_btn" onClick={handleJoin}>JOIN WAITLIST</button>
         </div>
-        </a>
+        {/* </a> */}
       </nav>
       <div className="hero_section_wrapper">
 
@@ -189,6 +220,31 @@ export default function Home() {
         <h6>Terms &amp; Conditions</h6>
       </div>
     </div>
+
+
+    {
+      showPopup &&
+      <div className="relative h-full overflow-y-auto">
+        <div className="question_popup">
+          <Questions phone={phone} onClose={() => setShowPopup(false)}/>
+        </div>
+      </div>
+    }
+
+    {
+      showJoinPopup &&
+      <div className="relative h-full overflow-y-auto">
+        <div className="join_popup">
+          <Join_waitlist 
+            phone={phone} 
+            setPhone={setPhone} 
+            onClose={() => setShowJoinPopup(false)} 
+            onOpen={() => setShowPopup(true)}
+          />
+        </div>
+      </div>
+    }
+
     </div>
   );
 }
